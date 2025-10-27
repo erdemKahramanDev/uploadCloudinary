@@ -63,10 +63,6 @@ Backend: `http://localhost:3000`
 **Frontend:** Vue 3, Vite, TailwindCSS, Vue Router
 **Backend:** Node.js, Express, Cloudinary, Redis, Multer
 
-## 📝 Detaylı Dokümantasyon
-
-Özellik detayları için: [GALLERY_FEATURES.md](./GALLERY_FEATURES.md)
-
 ## 👨‍💻 Geliştirici
 
 **AEKahraman** - [aekahraman.com](https://aekahraman.com)
