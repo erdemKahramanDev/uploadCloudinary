@@ -2,17 +2,18 @@
 [build]
   command = "npm run build"
   publish = "dist"
-  functions = "server"
+  functions = "netlify/functions"
 
 # Netlify Functions ayarları
 [functions]
   node_bundler = "esbuild"
+  external_node_modules = ["express", "cloudinary"]
   included_files = ["server/**/*"]
 
 # API route'ları için redirect
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  to = "/.netlify/functions/api/api/*"
   status = 200
   force = true
 
