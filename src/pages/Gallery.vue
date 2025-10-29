@@ -127,7 +127,7 @@ function changePage(page) {
 </script>
 
 <template>
-  <section class="max-w-6xl mx-auto py-10 px-4">
+  <section class="max-w-6xl mx-auto py-6 sm:py-10 px-4 sm:px-6">
     <!-- Login Ekranı -->
     <div v-if="!isAuthenticated" class="max-w-md mx-auto">
       <div class="rounded-2xl bg-gradient-to-br from-brand-600 via-brand-500 to-emerald-500 p-1 shadow-2xl">
@@ -162,17 +162,17 @@ function changePage(page) {
     </div>
 
     <!-- Galeri Ekranı -->
-    <div v-else class="rounded-2xl bg-white/95 dark:bg-slate-900/90 p-6 md:p-10">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <h1 class="text-2xl font-bold">Galeri</h1>
-          <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+    <div v-else class="rounded-2xl bg-white/95 dark:bg-slate-900/90 p-4 sm:p-6 md:p-10">
+      <div class="flex items-start sm:items-center justify-between mb-4 gap-3">
+        <div class="flex-1 min-w-0">
+          <h1 class="text-xl sm:text-2xl font-bold">Galeri</h1>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
             Misafirlerin yüklediği fotoğraflar ve videolar.
           </p>
         </div>
         <button
           @click="handleLogout"
-          class="text-sm text-rose-600 hover:text-rose-700 font-medium"
+          class="text-xs sm:text-sm text-rose-600 hover:text-rose-700 font-medium flex-shrink-0"
         >
           Çıkış Yap
         </button>
@@ -182,56 +182,56 @@ function changePage(page) {
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Dosya adı, yükleyen, format ara... (Örn: video, .mp4, .jpg, resim)"
+            placeholder="Ara... (video, .mp4, resim)"
             class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-brand-400 focus:outline-none"
           />
         </div>
-        <button class="btn-primary flex-shrink-0" @click="handleRouteChange">Yenile</button>
+        <button class="btn-primary flex-shrink-0 w-full sm:w-auto" @click="handleRouteChange">Yenile</button>
       </div>
       <div v-if="loading" class="text-center py-10 animate-pulse">Yükleniyor...</div>
       <div v-else-if="error" class="text-center py-10 text-rose-600">{{ error }}</div>
       <div v-else-if="paginatedFiles.length === 0" class="text-center py-10 text-slate-500">
         Henüz yüklenmiş fotoğraf yok.
       </div>
-      <transition-group name="fade" tag="div" v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <transition-group name="fade" tag="div" v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
         <div v-for="f in paginatedFiles" :key="f.id" class="rounded overflow-hidden bg-slate-100">
           <a :href="f.url || f.secure_url" target="_blank" rel="noopener" class="block relative group">
             <video
               v-if="f.resourceType === 'video'"
               :src="f.preview || f.url"
               :poster="f.thumbnail"
-              class="w-full h-48 object-cover"
+              class="w-full h-32 sm:h-40 md:h-48 object-cover"
               autoplay
               loop
               muted
               playsinline
             ></video>
-            <img v-else :src="f.thumbnail || f.url || f.secure_url" alt="preview" class="w-full h-48 object-cover" />
+            <img v-else :src="f.thumbnail || f.url || f.secure_url" alt="preview" class="w-full h-32 sm:h-40 md:h-48 object-cover" />
 
             <div v-if="f.resourceType === 'video'" class="absolute inset-0 pointer-events-none">
-              <div class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded shadow-lg flex items-center gap-1">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <div class="absolute top-1 sm:top-2 left-1 sm:left-2 bg-red-600 text-white text-xxs sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-lg flex items-center gap-1">
+                <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z"/>
                 </svg>
-                VIDEO
+                <span class="hidden sm:inline">VIDEO</span>
               </div>
               <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors">
-                <svg class="w-16 h-16 text-white opacity-60 group-hover:opacity-90 transition-opacity drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
+                <svg class="w-12 h-12 sm:w-16 sm:h-16 text-white opacity-60 group-hover:opacity-90 transition-opacity drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z"/>
                 </svg>
               </div>
             </div>
           </a>
-          <div class="p-2 text-xs text-slate-700">
+          <div class="p-1.5 sm:p-2 text-xxs sm:text-xs text-slate-700 overflow-hidden">
             <div class="truncate font-medium">
               {{ f.name }}
-              <span v-if="f.resourceType === 'video'" class="text-xxs bg-red-500 text-white px-1.5 py-0.5 rounded ml-1">VIDEO</span>
+              <span v-if="f.resourceType === 'video'" class="text-xxs bg-red-500 text-white px-1 sm:px-1.5 py-0.5 rounded ml-1">VIDEO</span>
             </div>
-            <div v-if="f.uploader" class="text-xxs text-slate-500 mt-1">
+            <div v-if="f.uploader" class="text-xxs text-slate-500 mt-1 truncate">
               <span class="font-medium">{{ f.uploader.name || 'Misafir' }}</span>
-              <span v-if="f.uploader.message">: {{ f.uploader.message }}</span>
+              <span v-if="f.uploader.message" class="truncate">: {{ f.uploader.message }}</span>
             </div>
-            <div class="text-xxs text-slate-500 mt-1">
+            <div class="text-xxs text-slate-500 mt-1 truncate">
               {{ f.createdTime ? new Date(f.createdTime).toLocaleString() : '' }}
             </div>
           </div>

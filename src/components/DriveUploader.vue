@@ -334,9 +334,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="max-w-4xl mx-auto py-10 px-4">
+  <section class="max-w-4xl mx-auto py-6 sm:py-10 px-4 sm:px-6">
     <div class="rounded-2xl bg-gradient-to-br from-brand-600 via-brand-500 to-emerald-500 p-1 shadow-2xl">
-      <div class="rounded-2xl bg-white/95 dark:bg-slate-900/90 backdrop-blur p-6 md:p-10">
+      <div class="rounded-2xl bg-white/95 dark:bg-slate-900/90 backdrop-blur p-4 sm:p-6 md:p-10">
         <header class="space-y-4">
           <div>
             <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Fotoğraf & Video Yükleme</h1>
@@ -373,45 +373,45 @@ onBeforeUnmount(() => {
 
         <div class="mt-6 grid gap-6 md:grid-cols-3">
           <aside class="space-y-4 md:order-2">
-            <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-4 bg-gradient-to-br from-brand-50 to-emerald-50 dark:from-slate-800 dark:to-slate-800">
-              <h3 class="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                <svg class="w-4 h-4 text-brand-600" fill="currentColor" viewBox="0 0 20 20">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 bg-gradient-to-br from-brand-50 to-emerald-50 dark:from-slate-800 dark:to-slate-800">
+              <h3 class="font-semibold text-slate-900 dark:text-white flex items-center gap-2 text-sm sm:text-base">
+                <svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
                 </svg>
                 Yükleme Bilgileri
               </h3>
-              <ul class="mt-3 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
-                <li class="flex items-center gap-2">
-                  <span class="text-green-600">✓</span>
-                  <span>Resim: JPG, JPEG, PNG, WEBP</span>
+              <ul class="mt-3 space-y-1.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600 flex-shrink-0">✓</span>
+                  <span class="break-words">Resim: JPG, JPEG, PNG, WEBP</span>
                 </li>
-                <li class="flex items-center gap-2">
-                  <span class="text-green-600">✓</span>
-                  <span>Video: MP4, MOV, AVI, WEBM</span>
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600 flex-shrink-0">✓</span>
+                  <span class="break-words">Video: MP4, MOV, AVI, WEBM</span>
                 </li>
-                <li class="flex items-center gap-2">
-                  <span class="text-green-600">✓</span>
-                  <span>Resim: Max 50MB (otomatik sıkıştırılır)</span>
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600 flex-shrink-0">✓</span>
+                  <span class="break-words">Resim: Max 50MB (otomatik sıkıştırılır)</span>
                 </li>
-                <li class="flex items-center gap-2">
-                  <span class="text-green-600">✓</span>
-                  <span>Video: Max 100MB</span>
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600 flex-shrink-0">✓</span>
+                  <span class="break-words">Video: Max 100MB</span>
                 </li>
-                <li class="flex items-center gap-2">
-                  <span class="text-green-600">✓</span>
-                  <span>Maksimum: 10 dosya</span>
+                <li class="flex items-start gap-2">
+                  <span class="text-green-600 flex-shrink-0">✓</span>
+                  <span class="break-words">Maksimum: 10 dosya</span>
                 </li>
               </ul>
             </div>
 
-            <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-4 text-sm text-slate-600 dark:text-slate-300">
-              <p class="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                <svg class="w-4 h-4 text-brand-600" fill="currentColor" viewBox="0 0 20 20">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+              <p class="font-semibold text-slate-900 dark:text-white flex items-center gap-2 text-sm">
+                <svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
                 </svg>
                 Gizlilik
               </p>
-              <p class="mt-1.5 text-xs">Dosyalarınız Cloudinary üzerinde güvenli bir şekilde saklanır.</p>
+              <p class="mt-1.5 text-xs break-words">Dosyalarınız Cloudinary üzerinde güvenli bir şekilde saklanır.</p>
             </div>
           </aside>
 
@@ -453,12 +453,12 @@ onBeforeUnmount(() => {
             </div>
 
             <div v-if="uploads.length" class="mt-6 grid gap-3">
-              <div v-for="u in uploads" :key="u.localId" class="rounded-xl border border-slate-200 dark:border-slate-700 p-3 bg-white/70 dark:bg-slate-800/60 flex items-center gap-4">
-                <video v-if="u.isVideo" :src="u.preview" class="w-20 h-20 object-cover rounded-md" muted></video>
-                <img v-else :src="u.preview" alt="preview" class="w-20 h-20 object-cover rounded-md" />
-                <div class="flex-1 min-w-0">
-                  <p class="font-medium text-slate-900 dark:text-white truncate">{{ u.file.name }}</p>
-                  <div class="flex items-center gap-2 text-xs text-slate-500">
+              <div v-for="u in uploads" :key="u.localId" class="rounded-xl border border-slate-200 dark:border-slate-700 p-3 bg-white/70 dark:bg-slate-800/60 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+                <video v-if="u.isVideo" :src="u.preview" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md flex-shrink-0" muted></video>
+                <img v-else :src="u.preview" alt="preview" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md flex-shrink-0" />
+                <div class="flex-1 min-w-0 w-full">
+                  <p class="font-medium text-sm sm:text-base text-slate-900 dark:text-white truncate">{{ u.file.name }}</p>
+                  <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500 mt-1">
                     <span>{{ (u.file.size/1024/1024).toFixed(2) }} MB</span>
                     <span v-if="u.wasCompressed" class="text-emerald-600 font-medium">
                       ({{ (u.originalSize/1024/1024).toFixed(2) }} MB'dan sıkıştırıldı)
@@ -467,14 +467,14 @@ onBeforeUnmount(() => {
                   <div class="mt-2 h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
                     <div class="h-full bg-gradient-to-r from-brand-500 to-emerald-500 transition-all" :style="{ width: `${u.progress}%` }" />
                   </div>
-                </div>
-                <div class="flex flex-col items-end gap-2">
-                  <div class="text-xs text-slate-600 dark:text-slate-300">{{ u.status === 'uploading' ? 'Yükleniyor' : u.status === 'done' ? 'Tamamlandı' : u.status === 'error' ? 'Hata' : 'Beklemede' }}</div>
-                  <div class="flex items-center gap-2">
-                    <a v-if="u.url" :href="u.url" target="_blank" rel="noopener" class="btn-link">Görüntüle</a>
-                    <button class="text-sm text-rose-600" @click="removeFile(u)" :disabled="u.status === 'uploading'">Kaldır</button>
+                  <div class="flex items-center justify-between mt-2 gap-2">
+                    <div class="text-xs text-slate-600 dark:text-slate-300">{{ u.status === 'uploading' ? 'Yükleniyor' : u.status === 'done' ? 'Tamamlandı' : u.status === 'error' ? 'Hata' : 'Beklemede' }}</div>
+                    <div class="flex items-center gap-2">
+                      <a v-if="u.url" :href="u.url" target="_blank" rel="noopener" class="text-xs text-brand-600 hover:text-brand-700 font-medium">Görüntüle</a>
+                      <button class="text-xs text-rose-600 hover:text-rose-700 font-medium" @click="removeFile(u)" :disabled="u.status === 'uploading'">Kaldır</button>
+                    </div>
                   </div>
-                  <p v-if="u.errorMessage" class="text-rose-600 text-sm">{{ u.errorMessage }}</p>
+                  <p v-if="u.errorMessage" class="text-rose-600 text-xs mt-1 break-words">{{ u.errorMessage }}</p>
                 </div>
               </div>
             </div>
