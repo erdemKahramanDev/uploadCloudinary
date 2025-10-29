@@ -8,6 +8,7 @@
     "dev:all": "run-p server dev",
     "server": "node server/index.js",
     "build": "vite build",
+    "start": "node server/index.js",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
