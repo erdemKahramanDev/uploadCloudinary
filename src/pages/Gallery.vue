@@ -1,16 +1,55 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const files = ref([])
 const loading = ref(false)
 const error = ref(null)
+const isAuthenticated = ref(false)
+const adminPassword = ref('')
+const authError = ref('')
 
 const searchQuery = ref('')
 const currentPage = ref(1)
 const perPage = 8
 
+// Admin şifresi - .env dosyasından alınır
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD
+
+function checkAuthentication() {
+  const savedAuth = sessionStorage.getItem('gallery_auth')
+  if (savedAuth === 'true') {
+    isAuthenticated.value = true
+  }
+}
+
+function handleLogin() {
+  if (adminPassword.value === ADMIN_PASSWORD) {
+    isAuthenticated.value = true
+    sessionStorage.setItem('gallery_auth', 'true')
+    authError.value = ''
+    adminPassword.value = ''
+  } else {
+    authError.value = 'Hatalı şifre!'
+  }
+}
+
+function handleLogout() {
+  isAuthenticated.value = false
+  sessionStorage.removeItem('gallery_auth')
+  router.push('/')
+}
+
 watch(searchQuery, () => {
   currentPage.value = 1
+})
+
+// isAuthenticated değiştiğinde dosyaları yükle
+watch(isAuthenticated, (newValue) => {
+  if (newValue) {
+    fetchFiles()
+  }
 })
 
 async function fetchFiles() {
@@ -36,8 +75,11 @@ function handleRouteChange() {
 }
 
 onMounted(() => {
-  handleRouteChange()
-  window.addEventListener('upload-complete', handleRouteChange)
+  checkAuthentication()
+  if (isAuthenticated.value) {
+    handleRouteChange()
+    window.addEventListener('upload-complete', handleRouteChange)
+  }
 })
 
 onBeforeUnmount(() => {
@@ -86,11 +128,55 @@ function changePage(page) {
 
 <template>
   <section class="max-w-6xl mx-auto py-10 px-4">
-    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/90 p-6 md:p-10">
-      <h1 class="text-2xl font-bold mb-4">Galeri</h1>
-      <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-        Misafirlerin yüklediği fotoğraflar ve videolar. Yenile butonuna basarak yeni yüklemeleri görebilirsiniz.
-      </p>
+    <!-- Login Ekranı -->
+    <div v-if="!isAuthenticated" class="max-w-md mx-auto">
+      <div class="rounded-2xl bg-gradient-to-br from-brand-600 via-brand-500 to-emerald-500 p-1 shadow-2xl">
+        <div class="rounded-2xl bg-white/95 dark:bg-slate-900/90 backdrop-blur p-6 md:p-10">
+          <h1 class="text-2xl font-bold mb-2 text-slate-900 dark:text-white">Admin Girişi</h1>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mb-6">
+            Galeri sadece admin kullanıcılarına açıktır.
+          </p>
+          <div class="space-y-4">
+            <div>
+              <label class="text-sm font-semibold text-slate-700 dark:text-slate-200 block mb-2">
+                Şifre
+              </label>
+              <input
+                v-model="adminPassword"
+                type="password"
+                @keyup.enter="handleLogin"
+                class="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2.5 text-sm focus:ring-2 focus:ring-brand-400 focus:border-brand-400 focus:outline-none bg-white dark:bg-slate-800"
+                placeholder="Admin şifresini girin"
+              />
+            </div>
+            <button
+              @click="handleLogin"
+              class="w-full btn-primary"
+            >
+              Giriş Yap
+            </button>
+            <p v-if="authError" class="text-rose-600 text-sm text-center">{{ authError }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Galeri Ekranı -->
+    <div v-else class="rounded-2xl bg-white/95 dark:bg-slate-900/90 p-6 md:p-10">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h1 class="text-2xl font-bold">Galeri</h1>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            Misafirlerin yüklediği fotoğraflar ve videolar.
+          </p>
+        </div>
+        <button
+          @click="handleLogout"
+          class="text-sm text-rose-600 hover:text-rose-700 font-medium"
+        >
+          Çıkış Yap
+        </button>
+      </div>
       <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
         <div class="flex-1">
           <input

@@ -1,9 +1,7 @@
 <script setup>
 import { ref, reactive, computed, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
 import imageCompression from 'browser-image-compression'
 
-const router = useRouter()
 const dragOver = ref(false)
 const fileInput = ref(null)
 const uploads = reactive([])
@@ -13,6 +11,16 @@ const guestMessage = ref('')
 const isUploading = ref(false)
 const isCompressing = ref(false)
 const compressionStatus = ref('')
+
+// Toast notification
+const toast = ref({ show: false, message: '', type: 'success' })
+
+function showToast(message, type = 'success') {
+  toast.value = { show: true, message, type }
+  setTimeout(() => {
+    toast.value.show = false
+  }, 4000)
+}
 
 const MAX_FILES = 10
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024
@@ -154,8 +162,12 @@ function removeFile(item) {
 async function uploadAll() {
   errors.files = null
   if (!canQueue.value) return
-  if (uploads.length === 0) {
-    errors.files = 'Lütfen en az bir fotoğraf seçin.'
+
+  // Sadece bekleyen dosyaları bul
+  const pendingItems = uploads.filter(u => u.status === 'queued' || u.status === 'error')
+
+  if (pendingItems.length === 0) {
+    errors.files = 'Yüklenecek dosya yok.'
     return
   }
 
@@ -163,15 +175,18 @@ async function uploadAll() {
 
   isUploading.value = true
   try {
-    await uploadItems(uploads)
+    await uploadItems(pendingItems)
 
-    await new Promise(resolve => setTimeout(resolve, 500))
-    await router.push({ path: '/gallery' })
-    window.dispatchEvent(new CustomEvent('upload-complete'))
+    // Başarı mesajı göster
+    const count = pendingItems.length
+    showToast(`${count} dosya başarıyla yüklendi! 🎉`, 'success')
+
+    // Sadece inputları temizle, önizlemeler kalsın
     resetForm()
 
   } catch (error) {
     errors.files = error.message || 'Yükleme sırasında bir hata oluştu.'
+    showToast(error.message || 'Yükleme başarısız oldu', 'error')
   } finally {
     isUploading.value = false
   }
@@ -180,7 +195,6 @@ async function uploadAll() {
 function resetForm() {
   guestName.value = ''
   guestMessage.value = ''
-  uploads.length = 0
   if (fileInput.value) fileInput.value.value = ''
 }
 
@@ -191,11 +205,10 @@ function uploadItems(items, retryCount = 0) {
     const xhr = new XMLHttpRequest()
     const form = new FormData()
 
+    // Tüm itemları yükle (zaten filtrelenmiş halde geliyor)
     items.forEach(item => {
-      if (item.status === 'queued' || item.status === 'uploading') {
-        form.append('files', item.file)
-        item.status = 'uploading'
-      }
+      form.append('files', item.file)
+      item.status = 'uploading'
     })
 
     form.append('name', guestName.value || '')
@@ -469,6 +482,41 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </div>
+
+    <!-- Toast Notification -->
+    <Transition name="toast">
+      <div
+        v-if="toast.show"
+        class="fixed bottom-6 right-6 z-50 max-w-md"
+      >
+        <div
+          class="rounded-lg shadow-2xl p-4 backdrop-blur-sm"
+          :class="toast.type === 'success' ? 'bg-emerald-500/95 text-white' : 'bg-rose-500/95 text-white'"
+        >
+          <div class="flex items-center gap-3">
+            <div class="flex-shrink-0">
+              <svg v-if="toast.type === 'success'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="flex-1 font-medium">
+              {{ toast.message }}
+            </div>
+            <button
+              @click="toast.show = false"
+              class="flex-shrink-0 text-white/80 hover:text-white transition-colors"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </Transition>
   </section>
 </template>
 
@@ -476,4 +524,34 @@ onBeforeUnmount(() => {
 .btn-primary { @apply inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white shadow hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-400 disabled:opacity-50 disabled:cursor-not-allowed; }
 .btn-secondary { @apply inline-flex items-center gap-2 rounded-lg bg-slate-200 px-4 py-2 font-semibold text-slate-800 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-400 disabled:opacity-50 disabled:cursor-not-allowed; }
 .btn-link { @apply text-brand-600 hover:text-brand-700 font-medium underline underline-offset-4; }
+
+/* Toast Animation */
+.toast-enter-active {
+  animation: toast-in 0.3s ease-out;
+}
+.toast-leave-active {
+  animation: toast-out 0.3s ease-in;
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
 </style>

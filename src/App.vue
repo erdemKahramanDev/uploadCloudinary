@@ -13,10 +13,6 @@
           </div>
           <span class="font-semibold tracking-tight text-slate-900 dark:text-white">Paylaşım Galerisi</span>
         </div>
-        <div class="flex items-center gap-4">
-          <router-link to="/" class="text-sm text-slate-600 dark:text-slate-300">Yükle</router-link>
-          <router-link to="/gallery" class="text-sm text-slate-600 dark:text-slate-300">Galeri</router-link>
-        </div>
       </div>
     </nav>
 
