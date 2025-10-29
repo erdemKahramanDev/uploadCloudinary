@@ -14,7 +14,6 @@ const searchQuery = ref('')
 const currentPage = ref(1)
 const perPage = 8
 
-// Admin şifresi - .env dosyasından alınır
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD
 
 function checkAuthentication() {
@@ -45,12 +44,25 @@ watch(searchQuery, () => {
   currentPage.value = 1
 })
 
-// isAuthenticated değiştiğinde dosyaları yükle
 watch(isAuthenticated, (newValue) => {
   if (newValue) {
     fetchFiles()
   }
 })
+
+function getVideoUrl(file) {
+
+  if (file.resourceType !== 'video') {
+    return file.url || file.secure_url
+  }
+
+  const url = file.url || file.secure_url
+
+  if (!url || !url.includes('cloudinary.com')) {
+    return url
+  }
+  return url.replace('/upload/', '/upload/f_auto,q_auto/')
+}
 
 async function fetchFiles() {
   loading.value = true
@@ -195,10 +207,10 @@ function changePage(page) {
       </div>
       <transition-group name="fade" tag="div" v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
         <div v-for="f in paginatedFiles" :key="f.id" class="rounded overflow-hidden bg-slate-100">
-          <a :href="f.url || f.secure_url" target="_blank" rel="noopener" class="block relative group">
+          <a :href="getVideoUrl(f)" target="_blank" rel="noopener" class="block relative group">
             <video
               v-if="f.resourceType === 'video'"
-              :src="f.preview || f.url"
+              :src="getVideoUrl(f)"
               :poster="f.thumbnail"
               class="w-full h-32 sm:h-40 md:h-48 object-cover"
               autoplay
